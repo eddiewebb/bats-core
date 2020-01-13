@@ -44,7 +44,7 @@ tests=()
       bats_encode_test_name "$name" 'encoded_name'
       printf '%s() { bats_test_begin "%s"; %s\n' "${encoded_name:?}" "$name" "$body" || :
 
-      if [[ -z "$BATS_TEST_FILTER" || "$name" =~ $BATS_TEST_FILTER ]]; then
+      if [[ ( -z "$BATS_TEST_FILTER" && -z "$BATS_TEST_LIST" ) || "$name" =~ $BATS_TEST_FILTER || "${BATS_TEST_LIST}" == *"$name"* ]]; then
         tests+=("$encoded_name")
       fi
     else
