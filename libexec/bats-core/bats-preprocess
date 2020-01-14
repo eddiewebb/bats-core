@@ -46,9 +46,7 @@ tests=()
 
 
 
-      if [[ -z "$BATS_TEST_FILTER" && -z "$BATS_TEST_LIST" ]];then
-        tests+=("$encoded_name")
-      elif [[ "$name" =~ $BATS_TEST_FILTER || "${BATS_TEST_LIST}" == *"${encoded_name}"* ]]; then
+      if [[ -z "$BATS_TEST_LIST" || "${BATS_TEST_LIST}" == *"${encoded_name}"* ]]; then
         tests+=("$encoded_name")
       fi
     else
