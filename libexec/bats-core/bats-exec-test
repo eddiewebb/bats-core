@@ -307,8 +307,8 @@ bats_exit_trap() {
     fi
     status=1
   else
-    printf 'ok %d %s%s\n' "$BATS_TEST_NUMBER" "$BATS_TEST_DESCRIPTION" \
-      "$skipped" >&3
+    printf 'ok %d %s%s %s\n' "$BATS_TEST_NUMBER" "$BATS_TEST_NAME" \
+      "$skipped" "$BATS_TEST_TIME" >&3
     status=0
   fi
 
@@ -320,6 +320,7 @@ bats_exit_trap() {
 bats_perform_test() {
   BATS_TEST_NAME="$1"
   BATS_TEST_NUMBER="$2"
+  BEFORE=$(date '+%s')
 
   if ! declare -F "$BATS_TEST_NAME" &>/dev/null; then
     printf "bats: unknown test name \`%s'\n" "$BATS_TEST_NAME" >&2
@@ -345,6 +346,8 @@ bats_perform_test() {
   trap 'bats_teardown_trap' EXIT
   "$BATS_TEST_NAME" >>"$BATS_OUT" 2>&1
   BATS_TEST_COMPLETED=1
+  AFTER=$(date '+%s')
+  BATS_TEST_TIME="#time=$(($AFTER-$BEFORE))"
   trap 'bats_exit_trap' EXIT
   bats_teardown_trap
 }
@@ -382,6 +385,7 @@ bats_evaluate_preprocessed_source() {
 exec 3<&1
 
 # Run the given test.
+
 bats_preprocess_source
 bats_evaluate_preprocessed_source
 bats_perform_test "$@"
