@@ -30,6 +30,7 @@ Usage: $cmd [-cr] [-f <regex>] [-j <jobs>] [-p | -t] <test>...
   -f, --filter     Filter test cases by names matching the regular expression
   -h, --help       Display this help message
   -j, --jobs       Number of parallel jobs to run (requires GNU parallel)
+  -l, --list       List all the matching jobs, execute nothing
   -p, --pretty     Show results in pretty format (default for terminals)
   -r, --recursive  Include tests in subdirectories
   -t, --tap        Show results in TAP format
