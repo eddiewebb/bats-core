@@ -117,6 +117,9 @@ while [[ "$#" -ne 0 ]]; do
     shift
     flags+=('-j' "$1")
     ;;
+  -l|--list)
+    flags+=('-l')
+    ;;
   -r|--recursive)
     recursive=1
     ;;
@@ -162,7 +165,7 @@ for filename in "${arguments[@]}"; do
 done
 
 formatter="cat"
-if [[ -n "$pretty" ]]; then
+if [[ -n "$pretty" && $flags != *"-l"* ]]; then
   flags+=("-x")
   formatter="bats-format-tap-stream"
 fi

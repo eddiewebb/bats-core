@@ -13,6 +13,9 @@ while [[ "$#" -ne 0 ]]; do
   -c)
     count_only_flag=1
     ;;
+  -l)
+    list_only_flag=1
+    ;;
   -f)
     shift
     filter="$1"
@@ -81,7 +84,10 @@ if [[ -n "$count_only_flag" ]]; then
 fi
 
 status=0
-printf '1..%d\n' "${test_count}"
+
+if [[ -z "$list_only_flag" ]]; then
+  printf '1..%d\n' "${test_count}"
+fi
 
 # No point on continuing if there's no tests.
 if [[ "${test_count}" == 0 ]]; then
@@ -103,7 +109,12 @@ else
       filename="${test_line%%$'\t'*}"
       test_name="${test_line##*$'\t'}"
       ((++test_number))
-      bats-exec-test "${flags[@]}" "$filename" "$test_name" "$test_number" || status=1
+
+      if [[ -n "$list_only_flag" ]]; then
+        printf '%s\n' "${test_name}"
+      else
+        bats-exec-test "${flags[@]}" "$filename" "$test_name" "$test_number" || status=1
+      fi
     fi
   done
   if [[ "${test_number}" != "${test_count}" ]]; then
